@@ -1,0 +1,7 @@
+.idea/
+__pycache__/
+
+Deeplearning8/*
+!Deeplearning8/20251028/
+
+Chapter01_파이썬 Introduction.pdf
