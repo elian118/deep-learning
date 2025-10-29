@@ -1,0 +1,26 @@
+def display_decison_surface(clf, X,  tempxy):
+    x_min = X['longitude'].min() - 0.01
+    x_max = X['longitude'].max() + 0.01
+    y_min = X['latitude'].min() - 0.01
+    y_max = X['latitude'].max() + 0.01
+
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.001),
+                         np.arange(y_min, y_max, 0.001))
+    #print(xx)  # [[126.8395 126.8405 126.8415 ... 127.1585 127.1595 127.1605]
+    #print(xx.shape)  #(237, 322)
+    np.set_printoptions(threshold=np.inf)
+    #print(xx.ravel())
+    #print(yy.ravel())
+    Z = clf.predict(np.column_stack([xx.ravel(), yy.ravel()]))
+    print(Z.shape)
+    Z = Z.reshape(xx.shape)
+    plt.figure(figsize=(10,7))
+    plt.contourf(xx, yy, Z, cmap=plt.cm.RdYlBu)
+
+    # color 참조 : https://matplotlib.org/stable/gallery/color/named_colors.html
+    plt.scatter(tempxy[0][0],tempxy[0][1], c='indigo', edgecolors='black', s=150)
+
+    plt.title('Decision Surface of predict data', fontsize=16)
+    plt.xlabel('longitude')
+    plt.ylabel('latitude')
+    plt.show()
