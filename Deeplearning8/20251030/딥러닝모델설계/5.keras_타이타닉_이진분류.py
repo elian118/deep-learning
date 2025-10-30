@@ -1,4 +1,13 @@
+# 136p
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 최소 경고 수준으로 설정 -> GPU 없을때 뜨는 자잘한 경고 무시
+
+import tensorflow as tf
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
 import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
 
 pd.set_option('display.max_rows',1000)
@@ -9,11 +18,12 @@ pd.set_option('max_colwidth', 1000)
 titanic_df = pd.read_csv("titanic_passengers.csv") # csv 파일 읽어와 Dataframe 객체 생성
 print(titanic_df.head())
 
+# 딥러닝에서는 숫자 데이터만 처리 가능하므로 아래 변환 코드는 비활성화
 # train_target = titanic_df['Survived']
 # 1: 생존, 0: 별세
-titanic_df['Survived'] = titanic_df['Survived'].map({1: 'survived', 0: 'fail'})
-print('=' * 155)
-print(titanic_df.sample(10))
+# titanic_df['Survived'] = titanic_df['Survived'].map({1: 'survived', 0: 'fail'})
+# print('=' * 155)
+# print(titanic_df.sample(10))
 
 # gender 컬럼 데이터를 수치 데이터로 변환 -> 해당 값이 구하려는 답 x에 해당하기 때문
 titanic_df['gender'] = titanic_df['gender'].map({'female': 1, 'male': 0})
@@ -88,37 +98,18 @@ print('=> ' + '데이터 스케일 정규화 결과 출력')
 print(train_scaled[:10])
 print(test_scaled[:10])
 
-# 로지스틱 회귀 모델 준비
-from sklearn.linear_model import LogisticRegression # 2진 분류 모델
+# 딥러닝 이진분류 모델 설계
+model = Sequential()
+model.add(Dense(8, input_dim=4, activation='relu'))
+model.add(Dense(4, activation='relu'))
+model.add(Dense(1, activation='sigmoid')) # 이진분류 시 출력층의 활성화 함수 ==> sigmoid
+# model.summary()
 
-LR_model = LogisticRegression(max_iter=1000) # 모델 생성
-# 모델 학습
-LR_model.fit(train_scaled, train_target)
+# 모델 컴파일
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+model.fit(train_scaled, train_target, batch_size=16, epochs=800, verbose=1)
 
 # 모델 평가
-print('=> ' + '모델 평가')
-print(LR_model.score(train_scaled, train_target))
-# 테스트 데이터 모델 평가
-print('=> ' + '테스트 데이터 모델 평가')
-print("test acc: ", LR_model.score(test_scaled, test_target))
-print('=> ' + '가중치, 절편')
-print(LR_model.coef_, LR_model.intercept_) # 가중치, 절편
+print("test acc: ", model.evaluate(test_scaled, test_target)[1])
 
-# 모델 예측
-print('=> ' + '모델 예측')
-print(LR_model.predict(test_scaled[:5]))
-print(test_target[:5])
-
-# 뉴 데이터를 만들어 예측
-# 뉴 데이터는 성별, 나이, 클래스1, 클래스2 정보를 Dataframe으로 만들고
-print('=> ' + '# 뉴 데이터는 성별, 나이, 클래스1, 클래스2 정보를 Dataframe으로 만들고')
-mydf = pd.DataFrame({'Gender': [0, 1, 0], 'Age': [50, 20, 30], 'class1': [1, 0, 1], 'class2': [0, 1, 0]}) # 데이터 컬럼명은 일치하지 않아도 무관, 단 데이터 구조와 인덱스는 일치해야 한다.
-print(mydf)
-# Dataframe 객체 정보를 스케일 변환 -> 데이터 정규화
-print('=> ' + 'Dataframe 객체 정보를 스케일 변환 -> 데이터 정규화')
-mydf_scaled = scaler.transform(mydf)
-print(mydf_scaled)
-# predict() 해서 출력 결과 확인
-print('=> ' + 'predict() 해서 출력 결과 확인')
-print(LR_model.predict(mydf_scaled))
-print(LR_model.predict_proba(mydf_scaled)) # 확률로 이진분류한 값 출력 -> 2번째 열이 생존결과
+model.save('titanicbestmodel.h5') # 6.keras_타이타닉_이진분류_예측.py 에서 재사용
