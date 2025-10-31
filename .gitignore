@@ -2,7 +2,10 @@
 .vscode/
 __pycache__/
 
-Deeplearning8/* !Deeplearning8/2025*/
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
 
 # requirements.txt 파일 재포함
 !Deeplearning8/requirements.txt
