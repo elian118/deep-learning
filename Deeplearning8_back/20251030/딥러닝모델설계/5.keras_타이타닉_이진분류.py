@@ -1,5 +1,13 @@
-import numpy as np
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # 최소 경고 수준으로 설정
+
+import tensorflow as tf
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Dense
+import numpy as np  # 랜덤 배열 데이터 생성
+import matplotlib.pyplot as plt  # 시각화
 import pandas as pd
+
 
 pd.set_option('display.max_rows',1000)
 pd.set_option('display.max_columns', 500)
@@ -12,7 +20,7 @@ print(titanic_df.head())
 #train_target = titanic_df['Survived']
 # 1 : 생존
 # 0 : 별세
-titanic_df['Survived'] = titanic_df['Survived'].map( {1:'survival', 0:'fail'} )
+#titanic_df['Survived'] = titanic_df['Survived'].map( {1:'survival', 0:'fail'} )
 
 # gender 컬럼 데이터를 수치 데이터로 변환
 titanic_df['gender'] = titanic_df['gender'].map({'female':1, 'male':0})
@@ -73,34 +81,18 @@ test_scaled = scaler.transform(test_input)
 print(train_scaled[:10])
 print(test_scaled[:10])
 
-# 로지스틱 회귀 모델 준비
-from sklearn.linear_model import LogisticRegression # 2진 분류 모델
+# 딥러닝 이진분류 모델 설계
+model = Sequential()
+model.add( Dense(8, input_dim=4, activation='relu')  )
+model.add( Dense(4, activation='relu'))
+model.add( Dense(1, activation='sigmoid')) # 이진분류시 출력층의 활성화 함수 ==> sigmoid
 
-LR_model = LogisticRegression(max_iter=1000)  # 모델 생성
-# 모델 학습
-LR_model.fit(train_scaled, train_target)
+#model.summary()
+# 모델 컴파일
+model.compile(optimizer= 'adam' , loss= 'binary_crossentropy' , metrics=['accuracy'])
+model.fit(train_scaled, train_target, batch_size=16, epochs=800, verbose=1)
 
-# train 데이터 모델 평가
-print( "train acc : ", LR_model.score(train_scaled, train_target) )
-# test 데이터 모델 평가
-print("test acc : ", LR_model.score(test_scaled, test_target))
+print("test acc : ", model.evaluate(test_scaled, test_target)[1] )
 
-print(LR_model.coef_, LR_model.intercept_)
-
-# 모델 예측
-print( LR_model.predict(test_scaled[:5]) )
-print( test_target[:5] )
-
-# 뉴 데이터를 만들어서 예측
-# 뉴데이터는 성별, 나이, 클래스1, 클래스2 정보를 Dataframe로 만들고
-# Dataframe 객체의 정보를 스케일 변환해서
-# predict() 해서 출력 결과를 확인
-
-mydf = pd.DataFrame( {'gender':[0,1,0],'Age':[50,20,30],'class1':[1,0,1],'class2':[0,1,0]})
-print(mydf)
-
-mydata_scaled = scaler.transform(mydf)
-print(mydata_scaled)
-
-print( LR_model.predict((mydata_scaled)) )
-print( LR_model.predict_proba(mydata_scaled) )
+# 모델 저장
+model.save('titanicbestmodel.h5')
