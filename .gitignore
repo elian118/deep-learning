@@ -13,3 +13,4 @@ pyvenv.cfg
 Ref_Textbooks/
 
 *.pdf
+*.h5
