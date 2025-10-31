@@ -2,7 +2,8 @@
 .vscode/
 __pycache__/
 
-Deeplearning8/*
+Deeplearning8/
+!Deeplearning8/requirements.txt
 !Deeplearning8/2025*/
 
 Ref_Textbooks/

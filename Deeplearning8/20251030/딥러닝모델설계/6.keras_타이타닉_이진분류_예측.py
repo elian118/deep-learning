@@ -60,13 +60,33 @@ from tensorflow.keras.models import load_model
 newmodel = load_model('titanicbestmodel.h5')
 
 pred = newmodel.predict(test_scaled)
-print('#' * 50)
-print(pred)
+print('# predict to test_scaled')
+print(pred) # 딥러닝의 이진분류 ==> 마지막 출력된 뉴런이 한개이고 sigmoid 함수를 수행하고 반환된 결과(0~1 사잇값 리스트)
 print('#' * 50)
 print(pred.flatten())
 
+# 결과 10개만 출력
 for i in range(10):
     print("실제 생존여부: {}, 예측 생존확률: {:.2f}%, 예측 생존여부: {}"
           .format(test_target.iloc[i],
                   pred.flatten()[i] * 100,
                   'Survived' if pred.flatten()[i] > 0.5 else 'Fail'))
+
+print('#' * 50)
+# test_scaled 말고, 새로운 샘플 데이터를 생성해 예측해보기
+print('# test_scaled 말고, 새로운 샘플 데이터를 생성해 예측해보기')
+sampledf = pd.DataFrame({'gender': [0, 1, 1], 'Age': [45, 30, 62], 'Class_1': [1, 0, 1], 'Class2_2': [0, 1, 0]})
+print(sampledf)
+
+sample_scaled = scaler.transform(sampledf)
+print('# sample_scaled')
+pred_new = newmodel.predict(sample_scaled)
+print(pred_new) # 딥러닝의 이진분류 ==> 마지막 출력된 뉴런이 한개이고 sigmoid 함수를 수행하고 반환된 결과(0~1 사잇값 리스트)
+print('# predict sample_scaled')
+print(pred_new.flatten())
+
+for i in range(len(pred_new.flatten())):
+    print("실제 생존여부: {}, 예측 생존확률: {:.2f}%, 예측 생존여부: {}"
+          .format(test_target.iloc[i],
+                  pred_new.flatten()[i] * 100,
+                  'Survived' if pred_new.flatten()[i] > 0.5 else 'Fail'))
