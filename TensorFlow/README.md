@@ -36,6 +36,10 @@
       - 성능이 안 좋으면 AUC는 직각삼각형 면적 0.5에 가깝다.
     - 객체 분류의 경우, PR curve를 더 많이 쓴다.
       - ROC curve는 왼쪽 위로 커브가 그려지는 반면에 PR curve는 오른쪽 위로 커브가 그려짐
+- 튜토리얼 사이트
+  - [PyTorch 튜토리얼(한국어)](https://tutorials.pytorch.kr/)
+- 기술동향
+  - [PyTorch 코리아 커뮤니티 > 읽을거리&정보공유 - 게시판](https://discuss.pytorch.kr/c/news/14)
 - 공부하기 좋은 책(위키독스)
   - [딥 러닝을 이용한 자연어 처리 입문](https://wikidocs.net/book/2155)
   - [D2L](https://d2l.ai/) 
