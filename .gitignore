@@ -12,4 +12,7 @@ Deeplearning8/*
 Ref_Textbooks/
 
 *.pdf
+
+# AI 모델 파일 배제
 *.h5
+*.keras
