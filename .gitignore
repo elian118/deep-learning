@@ -9,7 +9,8 @@ Deeplearning8/*
 # requirements.txt 파일 재포함
 !requirements.txt
 
-Ref_Textbooks/
+Ref_Textbooks/*
+!Ref_Textbooks
 
 *.pdf
 
