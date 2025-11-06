@@ -1,0 +1,12 @@
+### 실습
+- [교재](https://observant-fang-c48.notion.site/NVIDIA-DLI-KDT-Tensorflow-2979f3df6c6980f3896ade0afb1c0fbe)
+    - 오근철 강사님이 제공한 개발환경 설정 및 교보재 자료가 공유된 Notion 페이지
+    - 오염된 MNIST 데이터셋 분류 프로젝트 - 해답 포함
+- Colab
+  - [PyTorch로 고양이와 강아지 분류하기](https://colab.research.google.com/drive/1HFs49-42BbQdrLiFy7SCmUR58y2j6BD2?usp=sharing)
+    - PyTorch 입문용 과제
+- Kaggle
+  - [오염된 MNIST 데이터셋 분류 프로젝트](https://www.kaggle.com/code/postelian/noisy-mnist/edit)
+    - 위 실습 과제는 오근철 강사님의 과제 복사본을 내 계정으로 가져온 것 
+    - 먼저 Kaggle 가입 및 전화번호 인증 완료 → 가속기로 GPU/TPU 사용하려면 필요
+    - Settings > Accelerator > GPU P100 선택 
