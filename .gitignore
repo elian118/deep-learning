@@ -1,6 +1,7 @@
 .idea/
 .vscode/
 __pycache__/
+*checkpoint.ipynb
 
 Deeplearning8/*
 !Deeplearning8/requirements.txt
@@ -17,6 +18,7 @@ Ref_Textbooks/*
 # AI 모델 파일 배제
 *.h5
 *.keras
+*.pth
 
 # 생성된 데이터 파일
 PyTorch/data
